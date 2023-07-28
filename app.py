@@ -23,6 +23,11 @@ async def shutdown_event():
     print("shutting down...")
     await client.aclose()
 
+@app.get("/theo_doi_nhan_su/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    statement2 = select(update_data)
+    results2 = session.exec(statement2).all()
+    return results2
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
