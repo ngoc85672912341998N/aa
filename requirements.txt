@@ -7,6 +7,12 @@
 sqlalchemy
 databases
 pydantic
+databases[asyncpg]
+databases[aiopg]
+databases[aiomysql]
+databases[asyncmy]
+databases[aiosqlite]
+ipython
 anyio==3.6.2
     # via
     #   httpcore
