@@ -6,6 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 limits = httpx.Limits(max_keepalive_connections=5, max_connections=10)
@@ -22,4 +23,4 @@ async def shutdown_event():
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
 
-    return templates.TemplateResponse("index.html", context={"request": request})
+    return templates.TemplateResponse("1.html", context={"request": request})
