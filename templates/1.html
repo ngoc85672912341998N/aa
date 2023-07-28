@@ -206,15 +206,7 @@
             </tr>
           </thead>
           <tbody class="list">
-            {% for results in results %}
-            <tr>
-              <td class="name">{{ results.ho_ten_nhan_su }}</td>
-              <td class="dv">{{ results.don_vi }}</td>
-              <td class="st">{{ results.so_the_nhan_vien }}</td>
-              <td class="lf">{{ results.link_fb_nhan_vien }}</td>
-              <td class="lt">{{ results.luot_thich }}</td>
-            </tr>
-            {% endfor %}
+           
           </tbody>
         </table>
       </div>
@@ -280,21 +272,7 @@
             </tr>
           </thead>
           <tbody class="list">
-            {% for results2 in results2 %}
-            <tr>
-              <td class="name">{{ results2.ngay_update }}</td>
-              {% if "success" in results2.tinh_trang %}
-              <td class="align-middle text-end fs-0 white-space-nowrap payment"><span
-                  class="badge badge rounded-pill badge-soft-success">{{ results2.tinh_trang }}<span
-                    class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span></td>
-              {% endif %}
-              {% if "failed" in results2.tinh_trang %}
-              <td class="align-middle text-end fs-0 white-space-nowrap payment"><span
-                  class="badge badge rounded-pill badge-soft-warning">{{ results2.tinh_trang }}<span
-                    class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span></td>
-              {% endif %}
-            </tr>
-            {% endfor %}
+           
           </tbody>
         </table>
       </div>
