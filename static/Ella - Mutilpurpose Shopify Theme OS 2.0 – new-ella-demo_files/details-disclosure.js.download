@@ -1,0 +1,43 @@
+/** Shopify CDN: Minification failed
+
+Line 12:0 Transforming class syntax to the configured target environment ("es5") is not supported yet
+Line 13:15 Transforming object literal extensions to the configured target environment ("es5") is not supported yet
+Line 21:11 Transforming object literal extensions to the configured target environment ("es5") is not supported yet
+Line 24:8 Transforming const to the configured target environment ("es5") is not supported yet
+Line 27:8 Transforming const to the configured target environment ("es5") is not supported yet
+Line 32:14 Transforming object literal extensions to the configured target environment ("es5") is not supported yet
+Line 38:9 Transforming object literal extensions to the configured target environment ("es5") is not supported yet
+
+**/
+class DetailsDisclosure extends HTMLElement {
+    constructor() {
+        super();
+        this.mainDetailsToggle = this.querySelector('details');
+
+        this.addEventListener('keyup', this.onKeyUp);
+        this.mainDetailsToggle.addEventListener('focusout', this.onFocusOut.bind(this));
+    }
+
+    onKeyUp(event) {
+        if (event.code.toUpperCase() !== 'ESCAPE') return;
+
+        const openDetailsElement = event.target.closest('details[open]');
+        if (!openDetailsElement) return;
+
+        const summaryElement = openDetailsElement.querySelector('summary');
+        openDetailsElement.removeAttribute('open');
+        summaryElement.focus();
+    }
+
+    onFocusOut() {
+        setTimeout(() => {
+            if (!this.contains(document.activeElement)) this.close();
+        })
+    }
+
+    close() {
+        this.mainDetailsToggle.removeAttribute('open')
+    }
+}
+
+customElements.define('details-disclosure', DetailsDisclosure);
