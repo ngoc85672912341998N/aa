@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"))
+
 templates = Jinja2Templates(directory="templates")
 
 limits = httpx.Limits(max_keepalive_connections=30, max_connections=30)
