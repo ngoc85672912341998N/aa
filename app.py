@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="templates")
 limits = httpx.Limits(max_keepalive_connections=5, max_connections=10)
 timeout = httpx.Timeout(timeout=5.0, read=15.0)
 client = httpx.AsyncClient(limits=limits, timeout=timeout)
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.on_event("shutdown")
 async def shutdown_event():
@@ -20,26 +20,17 @@ async def shutdown_event():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request, username: str = None):
-    if not username:
-        return templates.TemplateResponse("index.html", context={"request": request})
+async def read_item(request: Request):
+    statement4 = select(bang_nhan_vien)
+    results4 = session.exec(statement4).all()
+    so_luong= len(results4)
+    k=0
+    for results4 in results4:
+        k=k+int(results4.luot_thich)
+    statement = select(bang_nhan_vien)
+    results = session.exec(statement).all()
+    statement2 = select(update_data)
+    results2 = session.exec(statement2).all()
+    return templates.TemplateResponse("1.html", {"request": request, "results": results,"results2":results2,"so_luong":so_luong,"tong_luot_thich":k})
 
-    user = await get_github_profile(request, username)
-    if not user:
-        return templates.TemplateResponse("404.html", context={"request": request})
 
-    return templates.TemplateResponse("index.html", context={"request": request, "user": user})
-
-
-@app.get("/{username}", response_model=GithubUserModel)
-async def get_github_profile(request: Request, username: str) -> Optional[GithubUserModel]:
-    headers = {"accept": "application/vnd.github.v3+json"}
-
-    response = await client.get(f"https://api.github.com/users/{username}", headers=headers)
-
-    if response.status_code == 404:
-        return None
-
-    user = GithubUserModel(**response.json())
-
-    return user
