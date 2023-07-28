@@ -4,21 +4,6 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from models import GithubUserModel
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-import time
-from typing import Optional
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from models import bang_nhan_vien,update_data
-from sqlmodel import Session,select
-from sql_model import engine
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-import os
-from fastapi import BackgroundTasks, FastAPI
-
-session=Session(bind=engine)
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -26,26 +11,21 @@ templates = Jinja2Templates(directory="templates")
 limits = httpx.Limits(max_keepalive_connections=5, max_connections=10)
 timeout = httpx.Timeout(timeout=5.0, read=15.0)
 client = httpx.AsyncClient(limits=limits, timeout=timeout)
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
-@app.on_event("shutdown")
-async def shutdown_event():
-    print("shutting down...")
-    await client.aclose()
+
+
 
 
 @app.get("/", response_class=HTMLResponse)
-async def read_item(request: Request):
-    statement4 = select(bang_nhan_vien)
-    results4 = session.exec(statement4).all()
-    so_luong= len(results4)
-    k=0
-    for results4 in results4:
-        k=k+int(results4.luot_thich)
-    statement = select(bang_nhan_vien)
-    results = session.exec(statement).all()
-    statement2 = select(update_data)
-    results2 = session.exec(statement2).all()
-    return templates.TemplateResponse("1.html", {"request": request, "results": results,"results2":results2,"so_luong":so_luong,"tong_luot_thich":k})
+async def index(request: Request, username: str = None):
+    if not username:
+        return templates.TemplateResponse("index.html", context={"request": request})
+
+    user = await get_github_profile(request, username)
+    if not user:
+        return templates.TemplateResponse("404.html", context={"request": request})
+
+    return templates.TemplateResponse("index.html", context={"request": request, "user": user})
+
 
 
