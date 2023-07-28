@@ -26,3 +26,10 @@ async def shutdown_event():
 async def index(request: Request):
 
     return templates.TemplateResponse("1.html", context={"request": request})
+
+@app.post("/thoi_gian_update/", response_model=update_data)
+def read_item(ngay:str,tinh_trang:str):
+    new_update = update_data(ngay_update=ngay, tinh_trang=tinh_trang)
+    session.add(new_update)
+    session.commit()
+    return new_update
