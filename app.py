@@ -6,11 +6,11 @@ from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI()
-
+app.mount("/static", StaticFiles(directory="static"))
 templates = Jinja2Templates(directory="templates")
 
-limits = httpx.Limits(max_keepalive_connections=15, max_connections=10)
-timeout = httpx.Timeout(timeout=15.0, read=15.0)
+limits = httpx.Limits(max_keepalive_connections=30, max_connections=30)
+timeout = httpx.Timeout(timeout=30.0, read=30.0)
 client = httpx.AsyncClient(limits=limits, timeout=timeout)
 
 
