@@ -1,10 +1,20 @@
-from typing import List
-
+from typing import Optional
+import httpx
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from models import bang_nhan_vien,update_data
+from sqlmodel import Session,select
+from sql_model import engine
+from sqlmodel import Field, Session, SQLModel, create_engine, select
 import databases
 import sqlalchemy
 from fastapi import FastAPI
 from pydantic import BaseModel
 
+app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 # SQLAlchemy specific code, as with any other app
 DATABASE_URL = "sqlite:///./test.db"
 # DATABASE_URL = "postgresql://user:password@postgresserver/db"
@@ -27,7 +37,6 @@ engine = sqlalchemy.create_engine(
 )
 metadata.create_all(engine)
 
-
 class NoteIn(BaseModel):
     text: str
     completed: bool
@@ -38,13 +47,9 @@ class Note(BaseModel):
     text: str
     completed: bool
 
-
-app = FastAPI()
-
-limits = httpx.Limits(max_keepalive_connections=5, max_connections=10)
-timeout = httpx.Timeout(timeout=5.0, read=15.0)
+limits = httpx.Limits(max_keepalive_connections=30, max_connections=30)
+timeout = httpx.Timeout(timeout=30.0, read=30.0)
 client = httpx.AsyncClient(limits=limits, timeout=timeout)
-
 
 
 @app.on_event("startup")
@@ -68,3 +73,13 @@ async def create_note(note: NoteIn):
     query = notes.insert().values(text=note.text, completed=note.completed)
     last_record_id = await database.execute(query)
     return {**note.dict(), "id": last_record_id}
+
+
+@app.get("/theo_doi_nhan_su/", response_class=HTMLResponse)
+async def read_item(request: Request): 
+    return "ssss"
+
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("1.html", context={"request": request})
+

@@ -4,6 +4,9 @@
 #
 #    pip-compile
 #
+sqlalchemy
+databases
+pydantic
 anyio==3.6.2
     # via
     #   httpcore
