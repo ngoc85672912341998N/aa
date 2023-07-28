@@ -3,7 +3,9 @@ import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-
+from sql_model import engine
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+session=Session(bind=engine)
 
 app = FastAPI()
 
