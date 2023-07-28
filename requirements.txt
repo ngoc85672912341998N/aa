@@ -10,6 +10,8 @@ anyio==3.6.2
     #   starlette
     #   watchfiles
 certifi==2020.12.5
+sqlmodel
+
     # via
     #   httpcore
     #   httpx

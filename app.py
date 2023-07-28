@@ -4,6 +4,21 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from models import GithubUserModel
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+import time
+from typing import Optional
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+from models import bang_nhan_vien,update_data
+from sqlmodel import Session,select
+from sql_model import engine
+from sqlmodel import Field, Session, SQLModel, create_engine, select
+import os
+from fastapi import BackgroundTasks, FastAPI
+
+session=Session(bind=engine)
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
