@@ -37,15 +37,6 @@ engine = sqlalchemy.create_engine(
 )
 metadata.create_all(engine)
 
-class NoteIn(BaseModel):
-    text: str
-    completed: bool
-
-
-class Note(BaseModel):
-    id: int
-    text: str
-    completed: bool
 
 limits = httpx.Limits(max_keepalive_connections=30, max_connections=30)
 timeout = httpx.Timeout(timeout=30.0, read=30.0)
@@ -60,19 +51,6 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown():
     await database.disconnect()
-
-
-@app.get("/notes/", response_model=List[Note])
-async def read_notes():
-    query = notes.select()
-    return await database.fetch_all(query)
-
-
-@app.post("/notes/", response_model=Note)
-async def create_note(note: NoteIn):
-    query = notes.insert().values(text=note.text, completed=note.completed)
-    last_record_id = await database.execute(query)
-    return {**note.dict(), "id": last_record_id}
 
 
 @app.get("/theo_doi_nhan_su/", response_class=HTMLResponse)
